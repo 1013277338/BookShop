@@ -1,0 +1,10 @@
+E:\BookShop\bin\BookShop.DataBaseMigrator.dll
+E:\BookShop\bin\BookShop.DataBaseMigrator.pdb
+E:\BookShop\BookShop.DataBaseMigrator\obj\Debug\BookShop.DataBaseMigrator.dll
+E:\BookShop\BookShop.DataBaseMigrator\obj\Debug\BookShop.DataBaseMigrator.pdb
+E:\BookShop\BookShop.DataBaseMigrator\obj\Debug\BookShop.DataBaseMigrator.csprojResolveAssemblyReference.cache
+E:\Project\BookShop\bin\BookShop.DataBaseMigrator.dll
+E:\Project\BookShop\bin\BookShop.DataBaseMigrator.pdb
+E:\Project\BookShop\BookShop.DataBaseMigrator\obj\Debug\BookShop.DataBaseMigrator.csprojResolveAssemblyReference.cache
+E:\Project\BookShop\BookShop.DataBaseMigrator\obj\Debug\BookShop.DataBaseMigrator.dll
+E:\Project\BookShop\BookShop.DataBaseMigrator\obj\Debug\BookShop.DataBaseMigrator.pdb

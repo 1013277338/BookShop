@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c6b9e809c22948a9bb732575e80b62d4" Name="关系图1">
+        <EntityTypeShape EntityType="BookShopModel.BillSetttings" Width="1.5" PointX="0.75" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.Books" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.Cart" Width="1.5" PointX="8.25" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.Categories" Width="1.5" PointX="3.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.OrderBook" Width="1.5" PointX="10.5" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.Orders" Width="1.5" PointX="8.25" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.PayInfo" Width="1.5" PointX="8.25" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.Publishers" Width="1.5" PointX="3.75" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.RoleInfo" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.RoleRight" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.SysFun" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.UserRoles" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.Users" Width="1.5" PointX="6" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookShopModel.UserStates" Width="1.5" PointX="3.75" PointY="6" IsExpanded="true" />
+        <AssociationConnector Association="BookShopModel.Books_CategoriesId_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.Books_PublishersId_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.Cart_BooksId_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.OrderBook_BookId_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.Cart_UserId_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.OrderBook_OrderId_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.Orders_UserId_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.PayInfo_UserId_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.RoleRight_RoleInfo_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.Users_RoleInfo_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.RoleRight_SysFun_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="BookShopModel.Users_UserStates_FK" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

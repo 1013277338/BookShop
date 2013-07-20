@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7B1C5A81-5FBE-41A6-8EAF-FDCA2E1482CB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BookShop.DataBaseMigrator</RootNamespace>
+    <AssemblyName>BookShop.DataBaseMigrator</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentMigrator">
+      <HintPath>..\Library\FluentMigrator.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.MSBuild">
+      <HintPath>..\Library\FluentMigrator.MSBuild.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner">
+      <HintPath>..\Library\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="10_OrderBook.cs" />
+    <Compile Include="11_PayInfo.cs" />
+    <Compile Include="12_SysFun.cs" />
+    <Compile Include="13_UserRoles.cs" />
+    <Compile Include="14_RoleRight.cs" />
+    <Compile Include="15_Insert_Role.cs" />
+    <Compile Include="16_Insert_UserStates.cs" />
+    <Compile Include="17_Insert_RoleInfo.cs" />
+    <Compile Include="18_Insert_Users.cs" />
+    <Compile Include="19_Insert_Categories.cs" />
+    <Compile Include="1_BillSetttings.cs" />
+    <Compile Include="20_Insert_Publishers.cs" />
+    <Compile Include="21_Insert_Books.cs" />
+    <Compile Include="2_Categories.cs" />
+    <Compile Include="3_Publishers.cs" />
+    <Compile Include="4_Books.cs" />
+    <Compile Include="5_RoleInfo.cs" />
+    <Compile Include="6_UserStates.cs" />
+    <Compile Include="7_Users.cs" />
+    <Compile Include="8_Cart.cs" />
+    <Compile Include="9_Orders.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

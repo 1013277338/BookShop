@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BookShopModelStoreContainer" CdmEntityContainer="BookShopEntities">
+    <EntitySetMapping Name="BillSetttings">
+      <EntityTypeMapping TypeName="BookShopModel.BillSetttings">
+        <MappingFragment StoreEntitySet="BillSetttings">
+          <ScalarProperty Name="partner" ColumnName="partner" />
+          <ScalarProperty Name="return_url" ColumnName="return_url" />
+          <ScalarProperty Name="subject" ColumnName="subject" />
+          <ScalarProperty Name="body" ColumnName="body" />
+          <ScalarProperty Name="out_trade_no" ColumnName="out_trade_no" />
+          <ScalarProperty Name="total_fee" ColumnName="total_fee" />
+          <ScalarProperty Name="seller_email" ColumnName="seller_email" />
+          <ScalarProperty Name="key" ColumnName="key" />
+          <ScalarProperty Name="sign" ColumnName="sign" />
+          <ScalarProperty Name="gatewayurl" ColumnName="gatewayurl" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Books">
+      <EntityTypeMapping TypeName="BookShopModel.Books">
+        <MappingFragment StoreEntitySet="Books">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="author" ColumnName="author" />
+          <ScalarProperty Name="isbn" ColumnName="isbn" />
+          <ScalarProperty Name="publishdate" ColumnName="publishdate" />
+          <ScalarProperty Name="wordscount" ColumnName="wordscount" />
+          <ScalarProperty Name="unitprice" ColumnName="unitprice" />
+          <ScalarProperty Name="contentdescription" ColumnName="contentdescription" />
+          <ScalarProperty Name="editorcomment" ColumnName="editorcomment" />
+          <ScalarProperty Name="toc" ColumnName="toc" />
+          <ScalarProperty Name="clicks" ColumnName="clicks" />
+          <ScalarProperty Name="categoryid" ColumnName="categoryid" />
+          <ScalarProperty Name="publisherid" ColumnName="publisherid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cart">
+      <EntityTypeMapping TypeName="BookShopModel.Cart">
+        <MappingFragment StoreEntitySet="Cart">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="count" ColumnName="count" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="bookid" ColumnName="bookid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="BookShopModel.Categories">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderBook">
+      <EntityTypeMapping TypeName="BookShopModel.OrderBook">
+        <MappingFragment StoreEntitySet="OrderBook">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="orderid" ColumnName="orderid" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="unitprice" ColumnName="unitprice" />
+          <ScalarProperty Name="bookid" ColumnName="bookid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="BookShopModel.Orders">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="orderid" ColumnName="orderid" />
+          <ScalarProperty Name="orderdate" ColumnName="orderdate" />
+          <ScalarProperty Name="state" ColumnName="state" />
+          <ScalarProperty Name="postAddress" ColumnName="postAddress" />
+          <ScalarProperty Name="totalprice" ColumnName="totalprice" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PayInfo">
+      <EntityTypeMapping TypeName="BookShopModel.PayInfo">
+        <MappingFragment StoreEntitySet="PayInfo">
+          <ScalarProperty Name="guid" ColumnName="guid" />
+          <ScalarProperty Name="money" ColumnName="money" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="remark" ColumnName="remark" />
+          <ScalarProperty Name="state" ColumnName="state" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Publishers">
+      <EntityTypeMapping TypeName="BookShopModel.Publishers">
+        <MappingFragment StoreEntitySet="Publishers">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleInfo">
+      <EntityTypeMapping TypeName="BookShopModel.RoleInfo">
+        <MappingFragment StoreEntitySet="RoleInfo">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="roledesc" ColumnName="roledesc" />
+          <ScalarProperty Name="rolename" ColumnName="rolename" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleRight">
+      <EntityTypeMapping TypeName="BookShopModel.RoleRight">
+        <MappingFragment StoreEntitySet="RoleRight">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="roleinfoid" ColumnName="roleinfoid" />
+          <ScalarProperty Name="sysfunid" ColumnName="sysfunid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SysFun">
+      <EntityTypeMapping TypeName="BookShopModel.SysFun">
+        <MappingFragment StoreEntitySet="SysFun">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="displayname" ColumnName="displayname" />
+          <ScalarProperty Name="nodeurl" ColumnName="nodeurl" />
+          <ScalarProperty Name="displayorder" ColumnName="displayorder" />
+          <ScalarProperty Name="parentnodeid" ColumnName="parentnodeid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserRoles">
+      <EntityTypeMapping TypeName="BookShopModel.UserRoles">
+        <MappingFragment StoreEntitySet="UserRoles">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="BookShopModel.Users">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="loginid" ColumnName="loginid" />
+          <ScalarProperty Name="loginpwd" ColumnName="loginpwd" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="mail" ColumnName="mail" />
+          <ScalarProperty Name="money" ColumnName="money" />
+          <ScalarProperty Name="userstateid" ColumnName="userstateid" />
+          <ScalarProperty Name="roleinfoid" ColumnName="roleinfoid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserStates">
+      <EntityTypeMapping TypeName="BookShopModel.UserStates">
+        <MappingFragment StoreEntitySet="UserStates">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
