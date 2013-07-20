@@ -1,0 +1,107 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="build.properties" />
+  <Import Project="build.targets" />
+
+  <!-- The main projects with application executables. -->
+  <ItemGroup>
+    
+
+  </ItemGroup>
+
+  <!-- Run the main application executable. -->
+  <Target Name="RunMain" DependsOnTargets="BuildMain">
+    <Exec Command="&quot;@(TargetOutputs)&quot; $(MainAppArgs)" />
+  </Target>
+
+  <!-- Build the main application executables (specify application name using the -->
+  <!-- Name property at command line). -->
+  <Target Name="BuildMain">
+    <MSBuild Condition="'%(MainProj.AppName)' == '$(Name)'" Projects="@(MainProj)" Targets="Build" Properties="Configuration=$(Configuration)">
+      <Output TaskParameter="TargetOutputs" ItemName="TargetOutputs" />
+    </MSBuild>
+  </Target>
+
+  <!-- Clean the outputs of the main application. -->
+  <Target Name="CleanMain">
+    <MSBuild Projects="@(MainProj)" Targets="Clean" Properties="Configuration=$(Configuration)" />
+  </Target>
+
+  <!-- Perform a complete rebuild process by cleaning the previous main application output. -->
+  <Target Name="RebuildMain" DependsOnTargets="CleanMain;BuildMain" />
+
+  <!-- Publish the main application executables (specify application name using the -->
+  <!-- Name property at command line). -->
+  <Target Name="PublishMain" DependsOnTargets="PrePublish">
+    <!-- Determine the source application binaries. -->
+    <CreateItem Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.AppType)' == 'MainApp'" Include="publishbin\%(PublishProj.AppName)\%(PublishProj.AppName).publish\**; PublishContent\%(PublishProj.AppName)\publish.asp">
+      <Output TaskParameter="Include" ItemName="SourceFiles" />
+    </CreateItem>
+
+    <CreateItem Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.AppType)' == 'ServerApp'" Include="publishbin\%(PublishProj.AppName)\**\*.exe; publishbin\%(PublishProj.AppName)\**\*.dll; PublishContent\%(PublishProj.AppName)\**\*.config">
+      <Output TaskParameter="Include" ItemName="SourceFiles" />
+    </CreateItem>
+
+    <CreateItem Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.AppType)' == 'WebApp'" Include="publishbin\%(PublishProj.AppName)\**\*.aspx; publishbin\%(PublishProj.AppName)\**\*.master; publishbin\%(PublishProj.AppName)\**\*.html; publishbin\%(PublishProj.AppName)\**\*.htm; publishbin\%(PublishProj.AppName)\**\*.dll; publishbin\%(PublishProj.AppName)\**\*.compiled; publishbin\%(PublishProj.AppName)\**\*.config; publishbin\%(PublishProj.AppName)\**\*.gif; publishbin\%(PublishProj.AppName)\**\*.jpg; publishbin\%(PublishProj.AppName)\**\*.png; publishbin\%(PublishProj.AppName)\**\*.css; publishbin\%(PublishProj.AppName)\**\*.js; PublishContent\%(PublishProj.AppName)\**\*.config">
+      <Output TaskParameter="Include" ItemName="SourceFiles" />
+    </CreateItem>
+
+    <CreateItem Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.AppType)' == 'WebServices'" Include="publishbin\%(PublishProj.AppName)\**\*.asmx; publishbin\%(PublishProj.AppName)\**\*.dll; publishbin\%(PublishProj.AppName)\**\*.compiled; publishbin\%(PublishProj.AppName)\**\*.config; PublishContent\%(PublishProj.AppName)\**\*.config; PublishContent\%(PublishProj.AppName)\**\*.license">
+      <Output TaskParameter="Include" ItemName="SourceFiles" />
+    </CreateItem>
+
+    <!-- Determine the destination folders to publish application binaries. -->
+    <CreateProperty Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.AppType)' == 'MainApp'" Value="$(PublishMainAppDir)\%(PublishProj.AppName)">
+      <Output TaskParameter="Value" PropertyName="DestinationFolder"/>
+    </CreateProperty>
+
+    <CreateProperty Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.AppType)' == 'ServerApp'" Value="$(PublishServerAppDir)\%(PublishProj.AppName)">
+      <Output TaskParameter="Value" PropertyName="DestinationFolder"/>
+    </CreateProperty>
+
+    <CreateProperty Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.AppType)' == 'WebApp'" Value="$(PublishWebAppDir)\%(PublishProj.AppName)">
+      <Output TaskParameter="Value" PropertyName="DestinationFolder"/>
+    </CreateProperty>
+
+    <CreateProperty Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.AppType)' == 'WebServices'" Value="$(PublishWebServicesDir)\%(PublishProj.AppName)">
+      <Output TaskParameter="Value" PropertyName="DestinationFolder"/>
+    </CreateProperty>
+
+    <!-- Sanity checks -->
+    <Error Condition="'@(SourceFiles)' == ''" Text="Unable to find source application files." />
+    <Error Condition="'$(DestinationFolder)' == ''" Text="Unable to locate publish destination." />
+
+    <!-- Clean and publish -->
+    <RemoveDir Directories="$(DestinationFolder)\" />
+    <Copy Condition="'@(SourceFiles)' != ''" SourceFiles="@(SourceFiles)" DestinationFolder="$(DestinationFolder)\%(SourceFiles.RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- Perform any pre-publication process by building publish projects and generate -->
+  <!-- the publish manifest information where necessary. This is a "private" target that -->
+  <!-- is used internally during the publish process. -->
+  <Target Name="PrePublish">
+    <!-- Clean up previous files -->
+    <RemoveDir Condition="'%(PublishProj.AppName)' == '$(Name)'" Directories="$(MSBuildProjectDirectory)\publishbin\%(PublishProj.AppName)\" />
+
+    <!-- Build process that generates the publish manifest information. -->
+    <MSBuild Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.BuildAction)' == 'ClickOnceBuild'" Projects="@(PublishProj)" Targets="Rebuild" Properties="Configuration=$(Configuration); GenerateManifests=false; OutputPath=$(MSBuildProjectDirectory)\publishbin\%(PublishProj.AppName)\">
+      <Output TaskParameter="TargetOutputs" ItemName="TargetOutputs" />
+    </MSBuild>
+
+    <GetAssemblyIdentity Condition="'@(TargetOutputs)' != ''" AssemblyFiles="@(TargetOutputs)">
+      <Output TaskParameter="Assemblies" ItemName="PublishAssemblyIdentity" />
+    </GetAssemblyIdentity>
+
+    <CreateProperty Condition="'@(PublishAssemblyIdentity)' != ''" Value="%(PublishAssemblyIdentity.Version)">
+      <Output TaskParameter="Value" PropertyName="PublishAssemblyVersion"/>
+    </CreateProperty>
+
+    <MSBuild Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.BuildAction)' == 'ClickOnceBuild'" Projects="@(PublishProj)" Targets="Publish" Properties="Configuration=$(Configuration); InstallUrl=$(InstallMainAppUrl)%(PublishProj.AppName)/; ApplicationVersion=$(PublishAssemblyVersion); OutputPath=$(MSBuildProjectDirectory)\publishbin\%(PublishProj.AppName)\" />
+
+    <!-- ASP.NET build process. -->
+    <AspNetCompiler Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.BuildAction)' == 'WebBuild'" VirtualPath="/" PhysicalPath="%(PublishProj.RelativeDir)" TargetPath="$(MSBuildProjectDirectory)\publishbin\%(PublishProj.AppName)\" Force="true" Updateable="false" Debug="false" />
+
+    <!-- Conventional build process. -->
+    <MSBuild Condition="'%(PublishProj.AppName)' == '$(Name)' And '%(PublishProj.BuildAction)' == 'Build'" Projects="@(PublishProj)" Targets="Build" Properties="Configuration=$(Configuration); OutputPath=$(MSBuildProjectDirectory)\publishbin\%(PublishProj.AppName)\" />
+  </Target>
+</Project>
+

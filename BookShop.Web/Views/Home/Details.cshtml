@@ -1,0 +1,92 @@
+﻿@model BookShop.Web.Models.BooksView
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style type="text/css">
+    .display-label
+    {
+        border:0px solid red;
+
+    }
+</style>
+<h2>Details</h2>
+
+<fieldset>
+    <legend>BooksView</legend>
+
+    <table>
+        <tr>
+            <td> @Html.DisplayNameFor(model => model.author)</td>
+            <td> @Html.DisplayFor(model => model.author)</td>
+        </tr>
+         <tr>
+            <td>  @Html.DisplayNameFor(model => model.isbn)</td>
+            <td> @Html.DisplayFor(model => model.isbn)</td>
+        </tr>
+         <tr>
+            <td> @Html.DisplayNameFor(model => model.publishdate)</td>
+            <td>  @Html.DisplayFor(model => model.publishdate)</td>
+        </tr>
+         <tr>
+            <td>@Html.DisplayNameFor(model => model.wordscount)</td>
+            <td>  @Html.DisplayFor(model => model.wordscount)</td>
+        </tr>
+         <tr>
+            <td>   @Html.DisplayNameFor(model => model.unitprice)</td>
+            <td> @Html.DisplayFor(model => model.unitprice)</td>
+        </tr>
+         <tr>
+            <td> @Html.DisplayNameFor(model => model.contentdescription)</td>
+            <td> @Html.DisplayFor(model => model.contentdescription)</td>
+        </tr>
+         <tr>
+            <td> @Html.DisplayNameFor(model => model.editorcomment)</td>
+            <td> @Html.DisplayFor(model => model.editorcomment)</td>
+        </tr>
+         <tr>
+            <td> @Html.DisplayNameFor(model => model.toc)</td>
+            <td> @Html.DisplayFor(model => model.toc)</td>
+        </tr>
+        <tr>
+            <td> @Html.DisplayNameFor(model => model.clicks)</td>
+            <td> @Html.DisplayFor(model => model.clicks)</td>
+        </tr>
+        <tr>
+            <td> @Html.DisplayNameFor(model => model.categoryid)</td>
+            <td> @Html.DisplayFor(model => model.categoryid)</td>
+        </tr>
+        <tr>
+            <td> @Html.DisplayNameFor(model => model.publisherid)</td>
+            <td> @Html.DisplayFor(model => model.publisherid)</td>
+        </tr>
+
+    </table>
+
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Add To Cart", "Cart", "Home", new { bookid = Model.id }, new { id="cart"})
+</p>
+
+<script type="text/javascript">
+    $(function () {
+        $("#cart").click(function () {
+            $.ajax({
+                url: "/Home/Cart",
+                type: "get",
+                success: function (data) {
+                    if (data == true) {
+                        alert("添加到购物车成功！");
+                    }
+                    else {
+                        alert("添加到购物车失败！");
+                        
+                    }
+                }
+            })
+        })
+    })
+</script>

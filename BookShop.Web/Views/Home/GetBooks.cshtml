@@ -1,0 +1,160 @@
+﻿@model PagerQuery<PagerInfo,IEnumerable<BookShop.Web.Models.BooksView>>
+
+@using BookShop.Web.Infrastructures
+
+<style type="text/css">
+    table
+    {border:1px solid black;
+    }
+    th,td,tr
+    {
+        border:1px solid black;
+        padding:5px;
+    }
+    span a {
+        cursor:pointer;
+    }
+</style>
+<table id="books">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().author)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().isbn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().publishdate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().wordscount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().unitprice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().contentdescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().editorcomment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().toc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().clicks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().categoryid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityList.First().publisherid)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model.EntityList) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.author)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isbn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.publishdate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.wordscount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unitprice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.contentdescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.editorcomment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.toc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.clicks)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.categoryid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.publisherid)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+    
+</table>
+<p>
+ @Html.Raw( @Html.Pager("pager",Model.Pager.CurrentPageIndex,Model.Pager.PageSize,Model.Pager.RecordCount,PageMode.Numeric))
+</p>
+
+<script type="text/javascript">
+    $(function () {
+      
+        
+        //$("#next a").click(function () {
+           
+        //    var str = $(this).attr("a");
+        //    var num = str.indexOf("=");
+        //    $.ajax({
+        //        type:"get",
+        //        url:"/Home/GetBooks",
+        //        data:{"pageIndex":str.substring(num+1)},
+        //        success:function(data){
+        //            $("body").html(data);
+        //        }
+        //    })
+        //   // return false;
+        //})
+
+        //$("#next a").click(function () {
+        //    gotoPage($(this));
+        //})
+
+        //$("#former a").click(function () {
+        //    gotoPage($(this));
+        //})
+
+        //$("#first a").click(function () {
+        //    gotoPage($(this));
+        //})
+
+        //$("#last a").click(function () {
+        //    gotoPage($(this));
+        //})
+
+        $("span a").click(function () {
+            gotoPage($(this));
+        })
+
+    })
+
+
+    var gotoPage = function (obj) {
+        var str = $(obj).attr("a");
+        var num = str.indexOf("=");     
+            $.ajax({
+                type: "get",
+                url: "/Home/GetBooks",
+                data: { "pageIndex": str.substring(num+1) },
+                success: function (data) {
+                    $("body").html(data);
+                }
+            })
+       
+        
+    }
+</script>

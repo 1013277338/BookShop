@@ -1,0 +1,63 @@
+﻿@model BookShop.WebApp.Models.RegisterUser
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register</h2>
+@using (Ajax.BeginForm("Register", new AjaxOptions { OnSuccess="Register"}))
+{
+<fieldset>
+    <legend>RegisterUser</legend>
+
+    <div class="display-label">loginId</div>
+    @Html.TextBoxFor(m=>m.loginId)
+
+    <div class="display-label">loginPwd</div>
+    @Html.TextBoxFor(m=>m.loginPwd)
+
+    <div class="display-label">name</div>
+    @Html.TextBoxFor(m=>m.name)
+
+    <div class="display-label">address</div>
+    @Html.TextBoxFor(m=>m.address)
+
+    <div class="display-label">phone</div>
+    @Html.TextBoxFor(m=>m.phone)
+
+    <div class="display-label">mail</div>
+    @Html.TextBoxFor(m=>m.mail)
+
+    <div class="display-label">money</div>
+    @Html.TextBoxFor(m=>m.money)
+
+    <div class="display-label">userstate</div>
+   @Html.DropDownList("userstates",ViewBag.userStates as List<SelectListItem>)
+     <div class="display-label">userrole</div>
+     @Html.DropDownList("userRolename",ViewBag.userRoles as List<SelectListItem>)
+
+</fieldset>
+
+<input type="submit" id="btnSubmit"  value="提交"/>
+
+<div id="message" style=" display:none;"></div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+    
+}
+<script type="text/javascript">
+    function Register() {
+        $.ajax({
+            url: "Account/Register",
+            type:"post",
+            data: "",
+            success: function (data) {
+                var message = $("#message");
+                document.getElementById("message").style.display = "block";
+                message.html(message);
+            }
+        });
+    }
+</script>

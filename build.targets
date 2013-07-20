@@ -1,0 +1,144 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- The main solution file with all projects. -->
+  <ItemGroup>
+    <MainSln Include="BookShop.sln" />
+  </ItemGroup>
+
+  <!-- The project with all unit tests. -->
+  <ItemGroup>
+    <UnitTest Include="Ocean.UltimateHarvest.Test\Ocean.UltimateHarvest.Test.csproj" />
+  </ItemGroup>
+
+  <!-- The default target for Rebuild, Build, and Clean. -->
+  <Target Name="Rebuild" DependsOnTargets="RebuildAll" />
+  <Target Name="Build" DependsOnTargets="BuildAll" />
+  <Target Name="Clean" DependsOnTargets="CleanAll" />
+
+  <!-- Run all unit tests. -->
+  <Target Name="RunTest" DependsOnTargets="BuildTest">
+    <Exec Command="&quot;$(NUnitConsole)&quot; &quot;@(TargetOutputs, '&quot; &quot;')&quot; /nologo" />
+  </Target>
+
+  <!-- Run a SQL Script file (specified using the Script property at command line). -->
+  <Target Name="RunSql">
+    <CreateItem Include="$(Script)">
+      <Output TaskParameter="Include" ItemName="SQLScript" />
+    </CreateItem>
+    
+    <Exec Condition="'$(SqlType)' == 'MSSQL'" Command="&quot;$(SqlCmd)&quot; -b -S $(SqlServer) -U $(SqlUser) -P $(SqlPassword) -d $(SqlDatabase) -i &quot;@(SQLScript, '&quot; -i &quot;')&quot;" />
+    <Exec Condition="'$(SqlType)' == 'MYSQL'" Command="Type &quot;@(SQLScript, '&quot; &quot;')&quot; | &quot;$(SqlCmd)&quot; --host=$(SqlServer) --user=$(SqlUser) --password=$(SqlPassword) $(SqlDatabase)" />
+  </Target>
+
+  <!-- Run a file copy to database (specified using the Table, Column, Where, Type, 
+       and File property at command line). -->
+  <Target Name="RunFileCopyDB">
+    <Exec Command="&quot;$(SqlFileCopyDbCmd)&quot; /S $(SqlServer) /U $(SqlUser) /P $(SqlPassword) /D $(SqlDatabase) /T $(Table) /C $(Column) /W &quot;$(Where)&quot; /Y $(Type) /F &quot;$(File)&quot;" />
+  </Target>
+
+  <!-- Build all all application executables and unit tests. -->
+  <Target Name="BuildAll">
+    <MSBuild Projects="@(MainSln)" Targets="Build" Properties="Configuration=$(Configuration)" />
+  </Target>
+
+  <!-- Build all unit tests. -->
+  <Target Name="BuildTest">
+    <MSBuild Projects="@(UnitTest)" Targets="Build" Properties="Configuration=$(Configuration)">
+      <Output TaskParameter="TargetOutputs" ItemName="TargetOutputs" />
+    </MSBuild>
+  </Target>
+
+  <!-- Build the class library documentation. (Build only on user invocation or ForceBuild by the Integration Server.) -->
+  <Target Name="BuildDoc" Condition="'$(CCNetBuildCondition)' == '' Or '$(CCNetBuildCondition)' == 'ForceBuild'" DependsOnTargets="BuildAll">
+    <CreateItem Include="**\ObjectiveWorld.*.dll;**\ObjectiveWorld.*.xml" Exclude="media\**\*.*;library\**\*.*;dataset\**\*.*">
+      <Output TaskParameter="Include" ItemName="DocFiles"/>
+    </CreateItem>
+
+    <Copy SourceFiles="@(DocFiles)" DestinationFolder="doc\" />
+    <Exec Command="&quot;$(NDoc)&quot; -recurse=doc\,1 -referencepath=library\ -documenter=&quot;MSDN-Web&quot; -OutputDirectory=&quot;$(DocOutput)&quot; -Version=&quot;$(DocVersion)&quot; -HtmlHelpName=&quot;xD Building Designer Class Library&quot; -Title=&quot;xD Building Designer Class Library Reference&quot; -AssemblyVersionInfo=AssemblyVersion -CopyrightText=&quot;Copyright (C) 2006 - 2007 Objective World Sdn. Bhd.&quot; -CopyrightHref=&quot;http://www.objectiveworld.com&quot; -FeedbackEmailAddress=&quot;info@objectiveworld.com&quot;" />
+  </Target>
+
+  <!-- Build the database tables. -->
+  <Target Name="BuildDB">
+    <Exec Condition="'$(SqlType)' == 'MSSQL'" Command="&quot;$(SqlCmd)&quot; -b -S $(SqlServer) -U $(SqlUser) -P $(SqlPassword) -d $(SqlDatabase) -i &quot;@(DBBuildScript, '&quot; -i &quot;')&quot;" />
+    <Exec Condition="'$(SqlType)' == 'MYSQL'" Command="Type &quot;@(DBBuildScript, '&quot; &quot;')&quot; | &quot;$(SqlCmd)&quot; --host=$(SqlServer) --user=$(SqlUser) --password=$(SqlPassword) $(SqlDatabase)" />
+
+    <!-- Insert the geometry data into database table. -->
+    <Exec Condition="'%(Media.Type)' == 'GeometryData'" Command="&quot;$(SqlFileCopyDbCmd)&quot; /S $(SqlServer) /U $(SqlUser) /P $(SqlPassword) /D $(SqlDatabase) /T GeometryData /C data /W &quot;WHERE geometryId = '%(Media.Filename)'&quot; /Y BLOB /F &quot;%(Media.Identity)&quot;" /> 
+
+    <!-- Insert the XDObject data into database table. -->
+    <Exec Condition="'$(SqlType)' == 'MSSQL' And '%(Media.Type)' == 'XDObjectData'" Command="&quot;$(SqlFileCopyDbCmd)&quot; /S $(SqlServer) /U $(SqlUser) /P $(SqlPassword) /D $(SqlDatabase) /T XDObjectData /C data /W &quot;WHERE data.value('declare namespace d=''http://www.objectiveworld.com/xDBD/Data/World/''; concat(data(/XDObject/d:MetaData/d:Namespace), ''.'', data(/XDObject/d:MetaData/d:ObjectName))', 'nvarchar(300)') = '%(Media.Filename)'&quot; /Y XML /F &quot;%(Media.Identity)&quot;" />
+    <Exec Condition="'$(SqlType)' == 'MYSQL' And '%(Media.Type)' == 'XDObjectData'" Command="&quot;$(SqlFileCopyDbCmd)&quot; /S $(SqlServer) /U $(SqlUser) /P $(SqlPassword) /D $(SqlDatabase) /T XDObjectData /C data /W &quot;WHERE Concat(ExtractValue(data, '/XDObject/d:MetaData/d:Namespace'), '.', ExtractValue(data, '/XDObject/d:MetaData/d:ObjectName')) = '%(Media.Filename)'&quot; /Y XML /F &quot;%(Media.Identity)&quot;" />
+
+    <!-- Insert the asset image data into database table. -->
+    <Exec Condition="'%(Media.Type)' == 'AssetImageData-Front'" Command="&quot;$(SqlFileCopyDbCmd)&quot; /S $(SqlServer) /U $(SqlUser) /P $(SqlPassword) /D $(SqlDatabase) /T AssetImage /C frontImageData /W &quot;WHERE description = '%(Media.Description)'&quot; /Y BLOB /F &quot;%(Media.Identity)&quot;" />
+    <Exec Condition="'%(Media.Type)' == 'AssetImageData-Left'" Command="&quot;$(SqlFileCopyDbCmd)&quot; /S $(SqlServer) /U $(SqlUser) /P $(SqlPassword) /D $(SqlDatabase) /T AssetImage /C leftImageData /W &quot;WHERE description = '%(Media.Description)'&quot; /Y BLOB /F &quot;%(Media.Identity)&quot;" />
+    <Exec Condition="'%(Media.Type)' == 'AssetImageData-Top'" Command="&quot;$(SqlFileCopyDbCmd)&quot; /S $(SqlServer) /U $(SqlUser) /P $(SqlPassword) /D $(SqlDatabase) /T AssetImage /C topImageData /W &quot;WHERE description = '%(Media.Description)'&quot; /Y BLOB /F &quot;%(Media.Identity)&quot;" />
+    <Exec Condition="'%(Media.Type)' == 'AssetImageData-Mesh'" Command="&quot;$(SqlFileCopyDbCmd)&quot; /S $(SqlServer) /U $(SqlUser) /P $(SqlPassword) /D $(SqlDatabase) /T AssetImage /C meshData /W &quot;WHERE description = '%(Media.Description)'&quot; /Y BLOB /F &quot;%(Media.Identity)&quot;" />
+  </Target>
+
+  <!-- Clean the outputs of all application executables and unit tests. -->
+  <Target Name="CleanAll">
+    <MSBuild Projects="@(MainSln)" Targets="Clean" Properties="Configuration=$(Configuration)" />
+  </Target>
+
+  <!-- Clean the outputs of the unit tests. -->
+  <Target Name="CleanTest">
+    <MSBuild Projects="@(UnitTest)" Targets="Clean" Properties="Configuration=$(Configuration)" />
+  </Target>
+
+  <!-- Clean the class library documentation. -->
+  <Target Name="CleanDoc">
+    <Delete Files="doc\*.*" />
+  </Target>
+
+  <!-- Clean the database tables. -->
+  <Target Name="CleanDB">
+    <Exec Condition="'$(SqlType)' == 'MSSQL'" Command="&quot;$(SqlCmd)&quot; -b -S $(SqlServer) -U $(SqlUser) -P $(SqlPassword) -d $(SqlDatabase) -i &quot;@(DBCleanScript, '&quot; -i &quot;')&quot;" />
+    <Exec Condition="'$(SqlType)' == 'MYSQL'" Command="Type &quot;@(DBCleanScript, '&quot; &quot;')&quot; | &quot;$(SqlCmd)&quot; --host=$(SqlServer) --user=$(SqlUser) --password=$(SqlPassword) $(SqlDatabase)" />
+  </Target>
+
+  <!-- Perform a complete rebuild process by cleaning the previous output. -->
+  <Target Name="RebuildAll" DependsOnTargets="CleanAll;BuildAll" />
+  <Target Name="RebuildTest" DependsOnTargets="CleanTest;BuildTest" />
+  <Target Name="RebuildDoc" DependsOnTargets="CleanDoc;BuildDoc" />
+  <Target Name="RebuildDB" DependsOnTargets="CleanDB;BuildDB" />
+
+  <PropertyGroup>
+    <MigratorTasksPath>Library</MigratorTasksPath>
+  </PropertyGroup>
+
+  <UsingTask TaskName="FluentMigrator.MSBuild.Migrate"
+       AssemblyFile="bin/FluentMigrator.MSBuild.dll"/>
+
+  <Target Name="Migrate" >
+    <Message Text="Starting FluentMigrator Migration"/>
+
+    <!-- The dll must be located where dotnet assembly loader can find it (same folder as the fluentmigrator dlls) -->
+    <!--<Copy SourceFiles="./bin/BookShop.DatabaseMigrator.dll" DestinationFolder="$(MigratorTasksPath)"/>-->
+    <!-- Important: Target must be your Migrations assembly name, not your dll file name.  -->
+    <Migrate Database="$(SqlType)"
+             Connection="Server=$(SqlServer);Database=$(SqlDatabase);User Id=$(SqlUser);Password=$(SqlPassword);"
+             Target="BookShop.DatabaseMigrator">
+    </Migrate>
+  </Target>
+
+  <Target Name="MigrateRollback" >
+    <Message Text="Starting FluentMigrator Migration Rollback"/>
+
+    <Migrate Database="$(SqlType)"
+             Connection="Server=$(SqlServer);Database=$(SqlDatabase);User Id=$(SqlUser);Password=$(SqlPassword);"
+             Target="BookShop.DatabaseMigrator"
+			       Task="rollback">
+    </Migrate>
+  </Target>
+
+  <Target Name="MigrateRollbackAll" >
+    <Message Text="Starting FluentMigrator Migration Rollback All"/>
+
+    <Migrate Database="$(SqlType)"
+             Connection="Server=$(SqlServer);Database=$(SqlDatabase);User Id=$(SqlUser);Password=$(SqlPassword);"
+             Target="BookShop.DatabaseMigrator"
+         Task="rollback:all">
+    </Migrate>
+  </Target>
+</Project>
